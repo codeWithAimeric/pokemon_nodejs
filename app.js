@@ -1,9 +1,16 @@
 const express = require('express');
-const { success } = require('./helper');
+const morgan = require('morgan');
+const favicon = require('serve-favicon');
+const { success } = require('./helper'); //import directly the 'success' function
 let pokemons = require('./mock-pokemon');
 
 const app = express();
 const port = 3000;
+
+//middleware
+app
+    .use(favicon(__dirname + '/favicon.ico'))
+    .use(morgan('dev'))
 
 app.get('/', (req, res) => res.send('Hello, Express !!'));
 
