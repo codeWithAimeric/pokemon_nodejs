@@ -1,3 +1,5 @@
+const validTypes = ['Plante', 'Poison', 'Feu', 'Eau', 'Insecte', 'Vol', 'Normal', 'Electrik', 'Fée'];
+
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('Pokemon', {
       id: {
@@ -7,19 +9,51 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: `La valeur du nom ne doit pas être vide.` },
+          notNull: { msg: `Le champ name ne doit pas être vide.`},
+        }
       },
       hp: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false, 
+        validate: {
+          isInt: { msg: `Utilisez uniquement des nombres entiers pour les points de vie.` },
+          notNull: { msg: `Les points de vie sont une propriété requise.` },
+          min: {
+            args: [0],
+            msg: `Cette valeur ne peut être égale à 0.`
+          },
+          max: {
+            args: [999],
+            msg: `Cette valeur est trop élevée.`
+          } 
+        }
       },
       cp: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          isInt: { msg: `Utilisez uniquement des nombres entiers pour cp` },
+          notNull: { msg: `cp est une propriété requise.` },
+          min: {
+            args: [0],
+            msg: `Cette valeur ne peut être égale à 0.`
+          },
+          max: {
+            args: [99], 
+            msg: `Cette valeur est trop élevée.`
+          } 
+        }
       },
       picture: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false, 
+        validate: {
+          isUrl: { msg: `Utilisez uniquement des urls pour les images` },
+          notNull: { msg: `picture est une propriété requise.` }
+        }
       },
       types: {
         type: DataTypes.STRING,
@@ -29,6 +63,21 @@ module.exports = (sequelize, DataTypes) => {
         },
         set(types){
             this.setDataValue('types', types.join())
+        },
+        validate: {
+          isTypesValid(value){
+            if(!value){
+              throw new Error(`Un pokémon doit au moins avoir un type.`)
+            }
+            if(value.split(',').length > 3){
+              throw new Error(`Un pokémon ne peut avoir plus de trois types.`)
+            }
+            value.split(',').forEach(element => {
+              if(!validTypes.includes(element)){
+                throw new Error(`Le type d'un pokémon doit appartenir à la liste suivante: ${validTypes}`)
+              }
+            });
+          }
         }
       }
     }, {
