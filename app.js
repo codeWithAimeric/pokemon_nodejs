@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./src/db/sequelize');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //middleware
 app
@@ -14,6 +14,10 @@ app
     .use(bodyParser.json())
 
 sequelize.initDb();
+
+app.get('/', (req, res) => {
+    res.json(`Hello World ! `)
+});
 
 require('./src/routes/findAllPokemons')(app)
 require('./src/routes/findPokemonByPk')(app)
