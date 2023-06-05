@@ -19,13 +19,18 @@ app.get('/', (req, res) => {
     res.json(`Hello World ! `)
 });
 
-require('./src/routes/findAllPokemons')(app)
-require('./src/routes/findPokemonByPk')(app)
-require('./src/routes/createPokemon')(app)
-require('./src/routes/updatePokemon')(app)
-require('./src/routes/deletePokemon')(app)
-require('./src/routes/login')(app)
+require('./src/routes/pokemon/findAllPokemons')(app)
+require('./src/routes/pokemon/findPokemonByPk')(app)
+require('./src/routes/pokemon/createPokemon')(app)
+require('./src/routes/pokemon/updatePokemon')(app)
+require('./src/routes/pokemon/deletePokemon')(app)
 
+require('./src/routes/user/login')(app)
+require('./src/routes/user/create')(app)
+require('./src/routes/user/update')(app)
+require('./src/routes/user/delete')(app)
+require('./src/routes/user/findUserByPk')(app)
+require('./src/routes/user/findAllUser')(app)
 
 //gestion des erreurs 404
 app.use(({res}) => {

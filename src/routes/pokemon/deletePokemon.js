@@ -1,5 +1,5 @@
-const { Pokemon } = require('../db/sequelize')
-const auth = require('../auth/auth')
+const { Pokemon } = require('../../db/sequelize')
+const auth = require('../../auth/auth')
   
 module.exports = (app) => {
   app.delete('/api/pokemons/:id', auth, (req, res) => {
