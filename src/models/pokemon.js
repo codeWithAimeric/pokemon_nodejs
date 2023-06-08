@@ -1,7 +1,7 @@
 const validTypes = ['Plante', 'Poison', 'Feu', 'Eau', 'Insecte', 'Vol', 'Normal', 'Electrik', 'Fée'];
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('Pokemon', {
+    const Pokemon = sequelize.define('Pokemon', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -58,6 +58,14 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: `picture est une propriété requise.` }
         }
       },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
+      },
       types: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -87,7 +95,16 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       createdAt: 'created',
       updatedAt: false
-    })
+    });
+
+    Pokemon.associate = function(models){
+      Pokemon.belongsTo(models.User, {
+        foreignKey: 'userId',
+        as: 'user'
+      })
+    };
+
+    return Pokemon;
 }
 //'define' prends 3 params : _le nom du modèle, _la description du modèle(colonnes), _option de parametrage globale(createdAt et updatedAt : générés automatiquement)
 //Synchroniser le modèle avec la BD : 

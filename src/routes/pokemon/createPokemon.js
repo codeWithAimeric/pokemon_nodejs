@@ -4,7 +4,12 @@ const auth = require('../../auth/auth')
   
 module.exports = (app) => {
     app.post('/api/pokemons', auth, (req, res) => {
-        Pokemon.create(req.body)
+        const userId =  (req.body.hasOwnProperty('userId') && typeof(req.body.userId) != 'undefined') ? parseInt(req.body.userId) : req.user.id
+        const pokemonData = {
+            ...req.body,
+            userId: userId
+        }
+        Pokemon.create(pokemonData)
         .then(pokemon => {
             const message = `Le pokémon ${req.body.name} a bien été crée.`
             res.json({ message, data: pokemon })
