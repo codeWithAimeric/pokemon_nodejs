@@ -36,12 +36,23 @@ module.exports = (app) => {
             .then(users => {
                 const total = users.count 
                 const pageCount = Math.ceil(total / limit)
+                let obj = {
+                    id: 0,
+                    username: ""
+                }
+                let resTab = []
+                for(let i=0; i<users.rows.length; i++){
+                    obj.id = users.rows[i].id
+                    obj.username = users.rows[i].username
+                    resTab.push(obj)
+                }
                 const response = {
                     page: page,
                     limit: limit, 
                     total: total, 
                     pageCount: pageCount,
-                    users: users.rows
+                    // users: users.rows
+                    users: resTab
                 }
                 const message = `List user received successfully !`
                 res.json({message: message, data: response})
